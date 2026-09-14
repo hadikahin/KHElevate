@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { SHOWCASE_ITEMS } from "@/data/showcase";
+import { SHOWCASE } from "@content/showcase";
 
 const GRADIENTS = [
   "from-terracotta/90 to-charcoal",
@@ -41,7 +41,7 @@ function ShowcaseCard({
 
 export function Marquee() {
   const [paused, setPaused] = useState(false);
-  const items = [...SHOWCASE_ITEMS, ...SHOWCASE_ITEMS];
+  const items = [...SHOWCASE.items, ...SHOWCASE.items];
 
   return (
     <div

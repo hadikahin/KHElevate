@@ -7,8 +7,7 @@ import gsap from "gsap";
 import { HeroCanvas } from "@/components/hero/HeroCanvas";
 import { ButtonLink } from "@/components/ui/Button";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-
-const headlineWords = ["Momentum", "your", "brand", "can", "actually", "feel."];
+import { HERO } from "@content/hero";
 
 const EASE_SWIFT = [0.22, 1, 0.36, 1] as const;
 
@@ -71,11 +70,11 @@ export function Hero() {
             transition={{ delay: 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="mb-7 inline-flex items-center gap-2 rounded-full border border-cream/15 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-gold"
           >
-            Growth &amp; content systems
+            {HERO.eyebrow}
           </motion.span>
 
           <h1 className="font-display text-[13vw] font-semibold leading-[1.02] tracking-tight sm:text-6xl md:text-7xl">
-            {headlineWords.map((word, i) => (
+            {HERO.headlineWords.map((word, i) => (
               <span key={word + i} className="inline-block overflow-hidden">
                 <motion.span
                   custom={i}
@@ -96,8 +95,7 @@ export function Hero() {
             transition={{ delay: 0.95, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="mt-7 max-w-xl text-lg text-cream/70 md:text-xl"
           >
-            Growth marketing and content systems for ambitious brands — built for
-            attention, engineered for results.
+            {HERO.subheadline}
           </motion.p>
 
           <motion.div
@@ -106,16 +104,16 @@ export function Hero() {
             transition={{ delay: 1.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="mt-11 flex flex-wrap items-center gap-4"
           >
-            <ButtonLink href="#contact" tone="dark" variant="primary">
-              Get started
+            <ButtonLink href={HERO.primaryCta.href} tone="dark" variant="primary">
+              {HERO.primaryCta.label}
             </ButtonLink>
             <ButtonLink
-              href="#how-it-works"
+              href={HERO.secondaryCta.href}
               tone="dark"
               variant="secondary"
               showArrow={false}
             >
-              See how it works
+              {HERO.secondaryCta.label}
             </ButtonLink>
           </motion.div>
         </div>

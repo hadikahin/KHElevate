@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow, Section } from "@/components/ui/Section";
 import { ButtonLink } from "@/components/ui/Button";
-import { VALUES } from "@/data/about";
+import { VALUES } from "@content/about";
 import { AboutReveal } from "@/components/about/AboutReveal";
 
 export const metadata: Metadata = {

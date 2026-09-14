@@ -1,4 +1,10 @@
-export const TESTIMONIALS = [
+export interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+}
+
+export const TESTIMONIALS: Testimonial[] = [
   {
     quote:
       "KH Elevate rebuilt our entire narrative in six weeks. Pipeline from content alone doubled by the end of the quarter.",
@@ -23,4 +29,4 @@ export const TESTIMONIALS = [
     name: "Client D",
     role: "CMO",
   },
-] as const;
+];

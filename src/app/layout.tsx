@@ -5,6 +5,7 @@ import { Navbar } from "@/components/nav/Navbar";
 import { Footer } from "@/components/footer/Footer";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { PageTransition } from "@/components/PageTransition";
+import { LeadCaptureWidget } from "@/components/leadcapture/LeadCaptureWidget";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -23,7 +24,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "KH Elevate — Empowering Your Growth",
   description:
-    "KH Elevate is a growth marketing and content systems studio for ambitious brands — market intelligence, narrative architecture, conversion systems, and growth infrastructure.",
+    "KH Elevate is a growth marketing and content studio for ambitious brands — social media management, paid campaigns, creative content production, and strategy.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <PageTransition>{children}</PageTransition>
         </main>
         <Footer />
+        <LeadCaptureWidget />
       </body>
     </html>
   );

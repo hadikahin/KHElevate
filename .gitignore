@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local lead capture storage (contains PII — never commit)
+/data/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

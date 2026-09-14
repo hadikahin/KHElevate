@@ -1,4 +1,9 @@
-export const VALUES = [
+export interface Value {
+  title: string;
+  description: string;
+}
+
+export const VALUES: Value[] = [
   {
     title: "Clarity over noise",
     description:
@@ -14,4 +19,4 @@ export const VALUES = [
     description:
       "Creative is judged on what it moves — pipeline, revenue, retention — never on how it feels in a deck.",
   },
-] as const;
+];

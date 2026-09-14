@@ -5,7 +5,7 @@ import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow, Section } from "@/components/ui/Section";
-import { TESTIMONIALS } from "@/data/testimonials";
+import { TESTIMONIALS } from "@content/testimonials";
 import { cn } from "@/lib/utils";
 
 export function Testimonials() {

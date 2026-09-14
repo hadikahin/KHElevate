@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow, Section } from "@/components/ui/Section";
-import { PROCESS_STEPS } from "@/data/process";
+import { PROCESS, type ProcessStep as ProcessStepType } from "@content/process";
 
 export function HowItWorks() {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -18,13 +18,11 @@ export function HowItWorks() {
     <Section id="how-it-works" tone="light">
       <Container>
         <div className="max-w-xl">
-          <Eyebrow tone="light">How it works</Eyebrow>
+          <Eyebrow tone="light">{PROCESS.eyebrow}</Eyebrow>
           <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            A system, not a scramble.
+            {PROCESS.headline}
           </h2>
-          <p className="mt-5 text-lg text-charcoal/65">
-            Four disciplined stages take a brand from unclear to unmissable.
-          </p>
+          <p className="mt-5 text-lg text-charcoal/65">{PROCESS.subheadline}</p>
         </div>
 
         <div ref={ref} className="relative mt-16 md:mt-20">
@@ -35,7 +33,7 @@ export function HowItWorks() {
           />
 
           <ol className="space-y-14 md:space-y-20">
-            {PROCESS_STEPS.map((step, i) => (
+            {PROCESS.steps.map((step, i) => (
               <ProcessStep key={step.number} step={step} index={i} />
             ))}
           </ol>
@@ -45,13 +43,7 @@ export function HowItWorks() {
   );
 }
 
-function ProcessStep({
-  step,
-  index,
-}: {
-  step: (typeof PROCESS_STEPS)[number];
-  index: number;
-}) {
+function ProcessStep({ step, index }: { step: ProcessStepType; index: number }) {
   return (
     <motion.li
       initial={{ opacity: 0, y: 30 }}

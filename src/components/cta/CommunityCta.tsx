@@ -3,11 +3,8 @@
 import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
+import { COMMUNITY_CTA } from "@content/communityCta";
 
-/**
- * Replaces the old "Join our Slack" block — the Slack community isn't an
- * active offering, so this repurposes the slot as a work-first secondary CTA.
- */
 export function CommunityCta() {
   return (
     <section className="relative overflow-hidden bg-cream py-24 md:py-28">
@@ -28,15 +25,14 @@ export function CommunityCta() {
           />
           <div className="relative">
             <h2 className="mx-auto max-w-2xl font-display text-3xl font-semibold tracking-tight md:text-5xl">
-              See the work behind the numbers.
+              {COMMUNITY_CTA.headline}
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-cream/65 md:text-lg">
-              Browse the campaigns, systems, and creative we&apos;ve shipped for brands
-              like yours.
+              {COMMUNITY_CTA.description}
             </p>
             <div className="mt-9 flex justify-center">
-              <ButtonLink href="#work" tone="dark" variant="primary">
-                View our work
+              <ButtonLink href={COMMUNITY_CTA.ctaHref} tone="dark" variant="primary">
+                {COMMUNITY_CTA.ctaLabel}
               </ButtonLink>
             </div>
           </div>

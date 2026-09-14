@@ -2,22 +2,53 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Loader2, Check } from "lucide-react";
+import { Loader2, Check, AlertCircle } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow, Section } from "@/components/ui/Section";
 import { FloatingInput, FloatingTextarea, Checkbox } from "@/components/contact/FormField";
 import { cn } from "@/lib/utils";
 
-type Status = "idle" | "loading" | "success";
+type Status = "idle" | "loading" | "success" | "error";
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (status !== "idle") return;
+    if (status === "loading" || status === "success") return;
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const payload = {
+      name: data.get("name"),
+      email: data.get("email"),
+      website: data.get("website"),
+      details: data.get("details"),
+      marketing: data.get("marketing") === "on",
+    };
+
     setStatus("loading");
-    window.setTimeout(() => setStatus("success"), 1400);
+    setErrorMessage(null);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await res.json().catch(() => null);
+
+      if (!res.ok || !result?.ok) {
+        throw new Error(result?.error || "Something went wrong. Please try again.");
+      }
+
+      setStatus("success");
+      form.reset();
+    } catch (err) {
+      setStatus("error");
+      setErrorMessage(err instanceof Error ? err.message : "Something went wrong.");
+    }
   }
 
   return (
@@ -76,7 +107,7 @@ export function ContactForm() {
 
             <button
               type="submit"
-              disabled={status !== "idle"}
+              disabled={status === "loading" || status === "success"}
               className={cn(
                 "group relative mt-8 inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full px-7 py-4 text-sm font-semibold tracking-tight transition-colors duration-300 sm:w-auto",
                 status === "success"
@@ -97,6 +128,7 @@ export function ContactForm() {
                   Message sent
                 </>
               )}
+              {status === "error" && "Try again"}
             </button>
 
             {status === "success" && (
@@ -106,6 +138,17 @@ export function ContactForm() {
                 className="mt-3 text-sm text-charcoal/55"
               >
                 Thanks — we&apos;ll be in touch within one business day.
+              </motion.p>
+            )}
+
+            {status === "error" && (
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-3 flex items-start gap-1.5 text-sm text-terracotta"
+              >
+                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                {errorMessage}
               </motion.p>
             )}
           </motion.form>

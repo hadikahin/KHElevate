@@ -4,11 +4,15 @@ import { useEffect, useState } from "react";
 
 export function CountUp({
   value,
+  decimals = 0,
+  prefix = "",
   suffix = "",
   active,
   duration = 1.6,
 }: {
   value: number;
+  decimals?: number;
+  prefix?: string;
   suffix?: string;
   active: boolean;
   duration?: number;
@@ -24,7 +28,7 @@ export function CountUp({
       const elapsed = (now - start) / 1000;
       const progress = Math.min(1, elapsed / duration);
       const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplay(Math.round(value * eased));
+      setDisplay(value * eased);
       if (progress < 1) raf = requestAnimationFrame(tick);
     }
 
@@ -34,7 +38,8 @@ export function CountUp({
 
   return (
     <span>
-      {display}
+      {prefix}
+      {display.toFixed(decimals)}
       {suffix}
     </span>
   );

@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { Logo } from "@/components/Logo";
-import { NAV_LINKS } from "@/data/nav";
+import { NAV_LINKS } from "@content/nav";
 import { ButtonLink } from "@/components/ui/Button";
 
 export function MobileMenu({

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/Logo";
-import { NAV_LINKS } from "@/data/nav";
+import { NAV_LINKS } from "@content/nav";
 import { ButtonLink } from "@/components/ui/Button";
 import { MobileMenu } from "@/components/nav/MobileMenu";
 import { Menu } from "lucide-react";
