@@ -36,11 +36,15 @@ everywhere.
   quotes are available.
 - **Intro deck PDF** — `content/leadCapture.ts` `deckPath` points at
   `/kh-elevate-intro-deck.pdf`. Drop the real file at
-  `public/kh-elevate-intro-deck.pdf` — the lead-capture email links to
-  whatever is at that path.
+  `public/kh-elevate-intro-deck.pdf` — until then, `/api/send-deck`
+  detects it's missing and sends a "still being finalized" message
+  instead of a dead link (see `successMessageDeckPending`).
 - **Booking link** — `content/leadCapture.ts` `bookingUrl` is `null`
   (pending a Calendly-or-similar link). The "Book a 1:1" button stays
   disabled/stubbed until a URL is set there.
 - **Email sending** — both the contact form and the lead-capture widget
   send through Resend. See `README.md` → "Environment variables" for the
   keys needed to turn real sending on.
+- **Lead storage** — captured leads write to a Google Sheet via a service
+  account; see `README.md` → "Lead capture & storage" for the one-time
+  setup and env vars.

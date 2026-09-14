@@ -1,5 +1,4 @@
-import { appendFile, mkdir } from "fs/promises";
-import path from "path";
+import { appendSheetRow } from "@/lib/googleSheets";
 
 export interface Lead {
   name: string;
@@ -8,28 +7,21 @@ export interface Lead {
   createdAt: string;
 }
 
-const LEADS_FILE = path.join(process.cwd(), "data", "leads.jsonl");
-
 /**
- * Durable-ish lead storage.
+ * Durable lead storage via Google Sheets (see README for setup — create a
+ * service account, enable the Sheets API, share the target sheet with the
+ * service account's email, set GOOGLE_SERVICE_ACCOUNT_EMAIL /
+ * GOOGLE_PRIVATE_KEY / GOOGLE_SHEET_ID).
  *
- * No database is provisioned for this project yet (see README/CONTENT.md
- * "Pending decisions"), so this appends each lead to a local JSONL file —
- * fine for local dev or a traditional always-on Node server, but Vercel's
- * serverless filesystem is read-only in production, so this write silently
- * no-ops there. The admin notification email sent alongside this (see
- * /api/send-deck) is the durable record until a real database is wired in.
- * Swap the body of this function for a DB insert (Supabase, Postgres, a
- * spreadsheet API, etc.) when one is chosen — call sites don't change.
+ * This never throws: a missing config or a Sheets-side failure is logged
+ * and swallowed rather than breaking the surrounding request — the lead
+ * still gets the intro-deck email either way, and the admin notification
+ * email is the fallback durable record if the sheet write fails.
  */
 export async function saveLead(lead: Lead): Promise<void> {
   try {
-    await mkdir(path.dirname(LEADS_FILE), { recursive: true });
-    await appendFile(LEADS_FILE, JSON.stringify(lead) + "\n", "utf8");
+    await appendSheetRow([lead.name, lead.email, lead.source, lead.createdAt]);
   } catch (err) {
-    console.warn(
-      "[leads] could not persist lead to file (expected on read-only/serverless hosts):",
-      err
-    );
+    console.warn("[leads] failed to persist lead to Google Sheets:", err);
   }
 }

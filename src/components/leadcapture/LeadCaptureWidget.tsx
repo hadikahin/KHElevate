@@ -15,6 +15,7 @@ export function LeadCaptureWidget() {
   const [showBubble, setShowBubble] = useState(false);
   const [showPulse, setShowPulse] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [deckAvailable, setDeckAvailable] = useState(true);
   const dismissedRef = useRef(false);
 
   useEffect(() => {
@@ -101,6 +102,7 @@ export function LeadCaptureWidget() {
         throw new Error(result?.error || "Something went wrong. Please try again.");
       }
 
+      setDeckAvailable(result.deckAvailable !== false);
       setStage("success");
     } catch (err) {
       setStage("error");
@@ -183,7 +185,9 @@ export function LeadCaptureWidget() {
                   className="flex flex-col gap-4"
                 >
                   <p className="text-sm leading-relaxed text-charcoal/75">
-                    {LEAD_CAPTURE.successMessage}
+                    {deckAvailable
+                      ? LEAD_CAPTURE.successMessage
+                      : LEAD_CAPTURE.successMessageDeckPending}
                   </p>
                   {LEAD_CAPTURE.bookingUrl ? (
                     <a

@@ -1,3 +1,5 @@
+import { existsSync } from "fs";
+import path from "path";
 import { NextResponse } from "next/server";
 import { getResendClient, EMAIL_NOT_CONFIGURED_MESSAGE } from "@/lib/resend";
 import { isValidEmail, isNonEmptyString } from "@/lib/validation";
@@ -5,6 +7,11 @@ import { escapeHtml } from "@/lib/email";
 import { saveLead } from "@/lib/leads";
 import { SITE } from "@content/site";
 import { LEAD_CAPTURE } from "@content/leadCapture";
+
+/** True once the real file is dropped at public/kh-elevate-intro-deck.pdf (see README). */
+function isDeckAvailable(): boolean {
+  return existsSync(path.join(process.cwd(), "public", LEAD_CAPTURE.deckPath));
+}
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -38,6 +45,7 @@ export async function POST(request: Request) {
 
   const adminTo = process.env.LEADS_TO_EMAIL || SITE.email;
   const from = process.env.CONTACT_FROM_EMAIL || "KH Elevate <onboarding@resend.dev>";
+  const deckAvailable = isDeckAvailable();
   const deckUrl = new URL(LEAD_CAPTURE.deckPath, request.url).toString();
 
   try {
@@ -55,8 +63,12 @@ export async function POST(request: Request) {
         subject: "Your KH Elevate intro deck",
         html: `
           <p>Hey ${escapeHtml(name)},</p>
-          <p>Thanks for your interest in KH Elevate — here's our intro deck:</p>
-          <p><a href="${deckUrl}">${deckUrl}</a></p>
+          <p>Thanks for your interest in KH Elevate!</p>
+          ${
+            deckAvailable
+              ? `<p>Here's our intro deck: <a href="${deckUrl}">${deckUrl}</a></p>`
+              : `<p>Our intro deck is being finalized — we'll send it your way as soon as it's ready.</p>`
+          }
           ${
             LEAD_CAPTURE.bookingUrl
               ? `<p>Want to talk it through? <a href="${LEAD_CAPTURE.bookingUrl}">Book a 1:1</a>.</p>`
@@ -74,7 +86,7 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json({ ok: true, bookingUrl: LEAD_CAPTURE.bookingUrl });
+    return NextResponse.json({ ok: true, bookingUrl: LEAD_CAPTURE.bookingUrl, deckAvailable });
   } catch {
     return NextResponse.json(
       { ok: false, error: "Something went wrong sending the deck. Please try again." },
